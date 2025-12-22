@@ -76,7 +76,6 @@ function drawFlatLine(ctx, color) {
 
 
 function plotSine1(ctx1, t1){
-  console.log("click canvas1")
     //const scale = 20
       if (paused[0]) {
     drawFlatLine(ctx1, "rgba(112, 112, 116, 1)");

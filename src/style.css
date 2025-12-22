@@ -5,6 +5,10 @@ html, body {
   padding: 0;
   overflow: hidden;
   background: #000;
+  display:flex;
+  flex-direction: column;
+  height: 100vh;
+  width: 100%;
 }
 
 .title{
@@ -39,7 +43,7 @@ html, body {
 display: flex;
 flex-direction: row;
 justify-content: center;
-height:105vh;
+height:auto;
 
 
 }
@@ -55,7 +59,7 @@ height:105vh;
   flex-direction:row;
   justify-content: space-between;
   width: 50vw;
-  height: 73%;
+  height: auto;
   overflow: hidden;
 }
 
@@ -204,8 +208,8 @@ width:100%
 }
 
 .end-piece{
-  height:15.4%;
-  width: 99%;
+  height:100%;
+  width: 50vw;
   border:blue solid  4px;
 }
 
@@ -216,7 +220,7 @@ width:100%
   flex-direction:column;
   align-items: end;
   width: 50vw;
-  height: 100%;
+  height:auto;
   overflow: hidden;
   gap:1.2rem;
 }
@@ -224,7 +228,7 @@ width:100%
 #grid-wrapper{
   position: relative;
   width:90%;
-  height: 70%;
+  height: 97%;
   border: greenyellow solid 4px;
 }
 
@@ -251,11 +255,22 @@ width:100%
 }
 
 .rect-bottom{
-  width: 98%;
-  height:15.5%;
+  width: 50vw;
+  height:100%;
+  margin-left:1%;
   border: greenyellow solid 4px;
 }
 
+.footer{
+  padding:0;
+  width:100%;
+  height:16%;
+  display:flex;
+  flex-direction: row;
+  gap:0;
+
+
+}
 
 
 /*-----DESIGN - POPUP LIBRARY-----*/
