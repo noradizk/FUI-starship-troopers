@@ -1,6 +1,6 @@
-import  {Pixel}  from "./pixel.js";
+import  Pixel  from "./pixel.js";
 
-//POUR LA GRIDp
+//POUR LA GRID
 
 const zone1 = document.getElementById('grid-wrapper');
 const canvas1 = document.getElementById("grid");
@@ -14,7 +14,7 @@ canvas1.height = rect1.height;
 //POUR L'IMAGE 
 const canvas2 = document.getElementById("grid-img");
 const rect2 = canvas2.getBoundingClientRect()
-const ctx2 = canvas2.getContext("2d");
+const ctx2 = canvas2.getContext("2d", { willReadFrequently: true });
 canvas2.width  = rect1.width;
 canvas2.height = rect1.height;
  
@@ -31,7 +31,7 @@ ctx1.lineWidth = 2;
 //grille
 let spacingX = canvas1.width/15;
 let spacingY = canvas1.width/15;
-for(let i =0; i <16; i++ ){
+for(let i =0; i <17; i++ ){
     ctx1.beginPath();
     ctx1.moveTo(0, i*spacingY)
     ctx1.lineTo(canvas1.width, i*spacingY)
@@ -56,10 +56,10 @@ ctx1.fill();
 
 
 //RASTERISATION IMAGE
-//grille 
+//grille base
 
-let cols = 40;
-let rows = 40;
+let cols = 400;
+let rows = 400;
 let cellSize = canvas2.width/cols;
 let pixels = [];
 
@@ -71,6 +71,7 @@ function buildGrid(){
         let py = y * cellSize;
         //créer un nouveau pixel dans l'array ctx2.rect()
         let pixel = new Pixel(px,py,cellSize);
+        pixel.row = y;
         //push mais trouver un autre truc bref
         pixels.push(pixel);
         };
@@ -79,8 +80,8 @@ function buildGrid(){
 
 buildGrid();
 
-// IMAGE TATOUAGE - quand tu n'a pas de balise <img>
 
+// G
 let overlayImageData = null;
 
 function apply() {
@@ -109,6 +110,45 @@ function renderGrid(){
     }
 }
 
+//fonction animation affichage image
+    
+// Animation reveal (ligne par ligne)
+let revealRow = 0;
+let animId = null;
+let rowsPerFrame = 1; // <- mets 1 ici
+
+function displayImage() {
+  revealRow = 0;
+  if (animId) cancelAnimationFrame(animId);
+
+  // on efface UNE fois au début
+  ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+
+  function step() {
+    // dessine seulement la/les nouvelles lignes
+    for (let r = 0; r < rowsPerFrame; r++) {
+      if (revealRow >= rows) break;
+
+      const start = revealRow * cols;
+      for (let x = 0; x < cols; x++) {
+        pixels[start + x].draw(ctx2);
+      }
+
+      revealRow++;
+    }
+
+    if (revealRow < rows) {
+      animId = requestAnimationFrame(step);
+    } else {
+      animId = null;
+    }
+  }
+
+  step();
+}
+
+apply();
+
 function drawTattooOnGrid(overlaySrc){
     const img = new Image();
     img.src = overlaySrc; 
@@ -118,13 +158,11 @@ function drawTattooOnGrid(overlaySrc){
         ctx2.drawImage(img, 0, 0, canvas2.width, canvas2.height);
         overlayImageData = ctx2.getImageData(0, 0, canvas2.width, canvas2.height);
         apply();
-        renderGrid();
+        displayImage(); // ✅ au lieu de renderGrid()
     }
 }
 window.drawTattooOnGrid = drawTattooOnGrid;
-//pour que ce soit utiliser dans main.js
 
-// fonction récupérer les couleurs et appliquerx aux "pixels"
 
 
 
