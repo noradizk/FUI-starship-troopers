@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>Creative Coding</title>
+  <link rel="stylesheet" href="./src/style.css">
+</head>
+
+<body>
+  <div class="title">
+    <h1 class="title-select">SELECTED</h1>
+    <h1 class="title-lasers">LASERS</h1>
+  </div>
+
+  <div class="screen">
+
+    <div class="TOTAL-LEFT">
+
+      <div class="split-screen-1">
+
+        <!-- LEFT COLUMN -->
+        <div class="selected-col">
+
+          <div class="design" id="load-image">
+            <img src="" class="image-tattoo" alt="">
+          </div>
+
+          <div id="text-purple">
+            <canvas id="purple-rain"></canvas>
+            <div id="digits"></div>
+
+          </div>
+
+          <!-- IMPORTANT: on garde ton bloc, mais on le met ici pour ne pas casser la row -->
+          <div class="text-white">
+            <p class="text-content">
+              AUTOMATIC<br>
+              SEQUENCE<br>
+              CONTROL<br>
+            </p>
+            
+          </div>
+
+        </div>
+
+        <!-- RIGHT COLUMN -->
+        <div class="lasers-col">
+
+          <div class="laser-box">
+            <h2 class="laser-name">Laser 1</h2>
+            <div class="laser-wrapper">
+              <canvas id="laser1"></canvas>
+            </div>
+          </div>
+
+          <div class="laser-box">
+            <h2 class="laser-name">Laser 2</h2>
+            <div class="laser-wrapper">
+              <canvas id="laser2"></canvas>
+            </div>
+          </div>
+
+          <div class="laser-box">
+            <h2 class="laser-name">Laser 3</h2>
+            <div class="laser-wrapper">
+              <canvas id="laser3"></canvas>
+            </div>
+          </div>
+
+          <div class="laser-box">
+            <h2 class="laser-name">Laser 4</h2>
+            <div class="laser-wrapper">
+              <canvas id="laser4"></canvas>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="end-piece"></div>
+
+    </div>
+
+    <!-- RIGHT SIDE SCREEN -->
+    <div class="split-screen-2">
+      <div id="grid-wrapper">
+        <canvas id="grid"></canvas>
+        <canvas id="grid-img"></canvas>
+      </div>
+      <div class="rect-bottom"></div>
+    </div>
+
+  </div>
+
+  <div class="footer"></div>
+
+  <!-- POPUP -->
+  <div id="select-popup" class="popup">
+    <div class="popup-window">
+      <div class="selection-wrapper">
+
+        <div class="selection" data-tattoo="death">
+          <img src="public/images/death.jpg" alt="Death laser" class="selection-img" />
+          <h3 class="selection-name">DEATH LASER</h3>
+        </div>
+
+        <div class="selection">
+          <img src="ton-image.png" alt="Death laser" class="selection-img" />
+          <h3 class="selection-name">DEATH LASER</h3>
+        </div>
+
+        <div class="selection">
+          <img src="ton-image.png" alt="Death laser" class="selection-img" />
+          <h3 class="selection-name">DEATH LASER</h3>
+        </div>
+
+      </div>
+    </div>
+  </div>
+
+  <script type="module" src="./src/main.js"></script>
+  <script type="module" src="./src/grid.js"></script>
+  <script type="module" src="./src/sineWave1.js"></script>
+  <script type="module" src="./src/purple.js"></script>
+</body>
+</html>
