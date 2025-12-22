@@ -204,7 +204,7 @@ function draw(){
     plotSine1(ctx1, t1);
     if(paused[0]){
         t1}else{
-        t1 += 0.8;
+        t1 += 0.3;
         }
     
 
