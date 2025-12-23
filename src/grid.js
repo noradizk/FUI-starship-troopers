@@ -200,31 +200,41 @@ function displayImage(color) {
   revealRow = 0;
   if (animId) cancelAnimationFrame(animId);
 
-  // on efface UNE fois au début
   ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
 
+  // 👇 affiche la barre à 0% au départ
+  p = 0;
+  progressBars(p);
+
   function step() {
-    // dessine seulement la/les nouvelles lignes
     for (let r = 0; r < rowsPerFrame; r++) {
       if (revealRow >= rows) break;
 
       const start = revealRow * cols;
       for (let x = 0; x < cols; x++) {
-        const p = pixels[start + x];
+        const pxx = pixels[start + x];
 
-        if (p.colorId === null) continue;      // transparent
-        if (!visible[p.colorId]) continue;     // couleur masquée
+        if (pxx.colorId === null) continue;
+        if (!visible[pxx.colorId]) continue;
 
-        p.draw(ctx2);
+        pxx.draw(ctx2);
       }
 
       revealRow++;
+
+      // 👇 MAJ progression après avoir révélé une ligne
+      p = revealRow / rows;
     }
+
+    // 👇 redessine la barre à chaque frame
+    progressBars(p);
 
     if (revealRow < rows) {
       animId = requestAnimationFrame(step);
     } else {
       animId = null;
+      // optionnel: forcer 100% pile
+      progressBars(1);
     }
   }
 
@@ -247,8 +257,43 @@ function drawTattooOnGrid(overlaySrc){
 }
 window.drawTattooOnGrid = drawTattooOnGrid;
 
+///// RECTANGLE PROGRESSION 
 
-///// RECTANGLE PRGRESSION 
+let p = 0;
 
+function clamp01(v) {
+  return Math.max(0, Math.min(1, v));
+}
 
+function progressBars(progress) {
+  const w = canvas3.width;
+  const h = canvas3.height;
 
+  ctx3.clearRect(0, 0, w, h);
+
+  const gap  = Math.floor(h * 0.01);
+  const count = 3;
+
+  const barW = w;
+  const usableH = Math.max(0, h - gap * (count - 1));
+  const barH = Math.max(6, Math.floor(usableH / count));
+
+  const progresses = Array.isArray(progress)
+    ? progress.map(clamp01)
+    : [clamp01(progress), clamp01(progress), clamp01(progress)];
+
+  const railStyle = "rgba(0, 0, 0, 1)";
+  const fillStyles = ["white", "white", "white"];
+
+  for (let i = 0; i < count; i++) {
+    const x0 = 0;
+    const y0 = i * (barH + gap);
+
+    ctx3.fillStyle = railStyle;
+    ctx3.fillRect(x0, y0, barW, barH);
+
+    const fillW = Math.floor(barW * progresses[i]);
+    ctx3.fillStyle = fillStyles[i];
+    ctx3.fillRect(x0, y0, fillW, barH);
+  }
+}
