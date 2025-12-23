@@ -59,10 +59,22 @@ let height;
 
 let paused = [false, false, false, false];
 
-canvas1.addEventListener("click", () => paused[0] = !paused[0]);
-canvas2.addEventListener("click", () => paused[1] = !paused[1]);
-canvas3.addEventListener("click", () => paused[2] = !paused[2]);
-canvas4.addEventListener("click", () => paused[3] = !paused[3]);
+canvas1.addEventListener("click", ()=>
+      {paused[0] = !paused[0];
+      window.hidePixel(0);
+      });
+canvas2.addEventListener("click", ()=> { 
+      paused[1] = !paused[1];
+      window.hidePixel(1) 
+      });
+canvas3.addEventListener("click", ()=>{
+      paused[2] = !paused[2];
+      window.hidePixel(2);
+      });
+canvas4.addEventListener("click", ()=>{
+      paused[3] = !paused[3];
+      window.hidePixel(3);
+      });
 
 function drawFlatLine(ctx, color) {
   ctx.beginPath();
