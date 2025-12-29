@@ -38,37 +38,66 @@ window.addEventListener("resize", resizeBarsCanvas);
 
 
 
-//faire la grid
-//faire des loop embriqués - line - distance - style de la ligne
-ctx1.strokeStyle = "lime";
-ctx1.lineWidth = 2;
+// grille statique (mise en cache) + coins animés
+const gridStatic = document.createElement("canvas");
+gridStatic.width = canvas1.width;
+gridStatic.height = canvas1.height;
+const gridStaticCtx = gridStatic.getContext("2d");
 
+function drawGridLines(ctx, w, h) {
+  ctx.clearRect(0, 0, w, h);
+  ctx.strokeStyle = "lime";
+  ctx.lineWidth = 2;
 
-//grille
-let spacingX = canvas1.width/15;
-let spacingY = canvas1.width/15;
-for(let i =0; i <17; i++ ){
-    ctx1.beginPath();
-    ctx1.moveTo(0, i*spacingY)
-    ctx1.lineTo(canvas1.width, i*spacingY)
-    ctx1.stroke();
+  const spacingX = w / 15;
+  const spacingY = w / 15;
+
+  for (let i = 0; i < 17; i++) {
+    ctx.beginPath();
+    ctx.moveTo(0, i * spacingY);
+    ctx.lineTo(w, i * spacingY);
+    ctx.stroke();
+  }
+
+  for (let j = 0; j < 17; j++) {
+    ctx.beginPath();
+    ctx.moveTo(j * spacingX, 0);
+    ctx.lineTo(j * spacingX, h);
+    ctx.stroke();
+  }
 }
-    for(let j = 0; j <17; j++){
-        ctx1.beginPath();
-        ctx1.moveTo(j*spacingX,0);
-        ctx1.lineTo(j*spacingX, canvas1.height);
-        ctx1.stroke();
-    }
 
+drawGridLines(gridStaticCtx, canvas1.width, canvas1.height);
 
-//rectangle angles
-ctx1.fillStyle = "red"; 
-ctx1.beginPath();
-ctx1.roundRect(0, 0, 50, 50, [0, 0, 50, 0]);
-ctx1.roundRect(0, canvas1.height-50, 50, 50, [0, 50, 0, 0]);
-ctx1.roundRect(canvas1.width-50, 0, 50, 50, [0, 0, 0, 50]);
-ctx1.roundRect(canvas1.width-50, canvas1.height-50,50, 50, [50, 0, 0, 0]);
-ctx1.fill();
+function drawCorners(ctx, t) {
+  const cycle = 1.4;
+  const phase = (t * 3) % cycle;
+  if (phase < 0.12) {
+    ctx.fillStyle = "rgb(255, 220, 0)";
+  } else {
+    const fadeT = Math.min(1, (phase - 0.12) / (cycle - 0.12));
+    const ease = fadeT * fadeT * (3 - 2 * fadeT);
+    const g = Math.floor(220 * (1 - ease));
+    ctx.fillStyle = `rgb(255, ${g}, 0)`;
+  }
+
+  ctx.beginPath();
+  ctx.roundRect(0, 0, 50, 50, [0, 0, 50, 0]);
+  ctx.roundRect(0, canvas1.height - 50, 50, 50, [0, 50, 0, 0]);
+  ctx.roundRect(canvas1.width - 50, 0, 50, 50, [0, 0, 0, 50]);
+  ctx.roundRect(canvas1.width - 50, canvas1.height - 50, 50, 50, [50, 0, 0, 0]);
+  ctx.fill();
+}
+
+function animateCorners(now) {
+  const t = now / 1000;
+  ctx1.clearRect(0, 0, canvas1.width, canvas1.height);
+  ctx1.drawImage(gridStatic, 0, 0);
+  drawCorners(ctx1, t);
+  requestAnimationFrame(animateCorners);
+}
+
+requestAnimationFrame(animateCorners);
 
 
 //RASTERISATION IMAGE
