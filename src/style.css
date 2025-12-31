@@ -69,8 +69,9 @@ margin-bottom: 0.5rem;
 }
 
 .selected-col{
-  display: grid;
-  grid-template-rows: 1fr 1fr auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
   gap: 0.4rem;
   padding: 0.3rem;
   box-sizing: border-box;
@@ -280,9 +281,19 @@ margin-bottom: 0.5rem;
   position: relative;
   width: 50vw;
   height: 100%;
-  overflow: hidden;
+  overflow: visible;
   gap:1.2rem;
   min-height: 0;
+}
+
+.fx-host{
+  position: absolute;
+  top: -40px;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 0;
+  pointer-events: none;
 }
 
 #fx-frame{
@@ -303,9 +314,18 @@ margin-bottom: 0.5rem;
   border: greenyellow solid 7px;
   border-radius: 10px;
   z-index: 1;
+  overflow: visible;
 }
 
-
+#grid-fx{
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  display: block;
+  z-index: 0;
+  pointer-events: none;
+}
 
 #grid{
   position:absolute;
@@ -313,12 +333,12 @@ margin-bottom: 0.5rem;
   display: block;
   height:100%;
   width:100%;
-
+  z-index: 1;
 }
 
 #grid-img{
   position: absolute;
-
+  z-index: 1;
   height:80%;
   width:80%;
   top:50%;

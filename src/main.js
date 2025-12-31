@@ -1,3 +1,5 @@
+import { initGridFx } from "./gridFx.js";
+
 // code pour le popup
 let selected = document.querySelector("#load-image");
 let popup    = document.querySelector(".popup");
@@ -5,6 +7,8 @@ let imageBtns = document.querySelectorAll(".selection");// plusieurs éléments
 //id image pour l'afficher ?? ou ptre utiliser un JSON 
 let tattooImg = document.querySelector(".image-tattoo");
 let ImgSelect = document.querySelectorAll(".selection-img")
+
+initGridFx();
 
 
 // DATA des tattoos
@@ -69,7 +73,6 @@ A FAIRE
 - ORGANISATION 
   FAIRE UN JSON
 */
-
 
 
 
