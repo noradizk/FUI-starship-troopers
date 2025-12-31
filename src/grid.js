@@ -22,7 +22,7 @@ canvas2.height = rect1.height;
 // === CANVAS BARRES (rect-bottom) ===
 // HTML: <canvas class="rect-bottom"></canvas>
 
-const canvas3 = document.querySelector(".rect-bottom");
+const canvas3 = document.querySelector(".progress");
 const ctx3 = canvas3.getContext("2d");
 
 // resize propre (à appeler au load + au resize)
