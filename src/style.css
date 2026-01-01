@@ -384,7 +384,7 @@ margin-bottom: 0.5rem;
   height: clamp(3rem, 12vh, 8rem);
   display:flex;
   flex-direction: row;
-  gap:0;
+  gap:1rem;
 
 
 }
