@@ -16,6 +16,11 @@ const tattoos = {
   death: {
     main: "/images/death.jpg",
     overlay: "/images/death-red.jpg"
+  },
+
+  infantry: {
+    main: "/images/infantry-selection.jpg",
+    overlay: "/images/infantry.jpg"
   }
 }
 
@@ -73,7 +78,6 @@ A FAIRE
 - ORGANISATION 
   FAIRE UN JSON
 */
-
 
 
 

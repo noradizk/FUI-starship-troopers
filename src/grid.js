@@ -17,6 +17,21 @@ const rect2 = canvas2.getBoundingClientRect()
 const ctx2 = canvas2.getContext("2d", { willReadFrequently: true });
 canvas2.width  = rect1.width;
 canvas2.height = rect1.height;
+
+const colorCanvases = [canvas2];
+const colorCtxs = [ctx2];
+const colorBuffers = [];
+const colorBufferCtxs = [];
+
+for (let i = 1; i < 4; i++) {
+  const layer = document.createElement("canvas");
+  layer.className = "grid-layer";
+  layer.width = canvas2.width;
+  layer.height = canvas2.height;
+  zone1.appendChild(layer);
+  colorCanvases[i] = layer;
+  colorCtxs[i] = layer.getContext("2d");
+}
  
 
 // === CANVAS BARRES (rect-bottom) ===
@@ -146,6 +161,43 @@ const PALETTE =[
 //VISIBILITE DES COULEURS 
 const visible = [true, true, true, true];
 
+// stats par couleur pour les barres de progression
+let rowColorCounts = [];
+let colorTotals = [0, 0, 0, 0];
+
+function rebuildColorStats() {
+  rowColorCounts = Array.from({ length: rows }, () => [0, 0, 0, 0]);
+  colorTotals = [0, 0, 0, 0];
+
+  for (let k = 0; k < pixels.length; k++) {
+    const p = pixels[k];
+    if (p.colorId === null) continue;
+    rowColorCounts[p.row][p.colorId] += 1;
+    colorTotals[p.colorId] += 1;
+  }
+}
+
+function rebuildColorBuffers() {
+  colorBuffers.length = 0;
+  colorBufferCtxs.length = 0;
+
+  for (let i = 0; i < 4; i++) {
+    const buffer = document.createElement("canvas");
+    buffer.width = canvas2.width;
+    buffer.height = canvas2.height;
+    const bctx = buffer.getContext("2d");
+    bctx.clearRect(0, 0, buffer.width, buffer.height);
+    colorBuffers[i] = buffer;
+    colorBufferCtxs[i] = bctx;
+  }
+
+  for (let k = 0; k < pixels.length; k++) {
+    const p = pixels[k];
+    if (p.colorId === null) continue;
+    p.draw(colorBufferCtxs[p.colorId]);
+  }
+}
+
 function apply() {
   if (!overlayImageData) return; // return = on sort de la fonction 
 
@@ -172,6 +224,8 @@ function apply() {
     p.colorId = (a === 0) ? null : closestColorId(r, g, b);
   }
 
+  rebuildColorStats();
+  rebuildColorBuffers();
 
 }
 
@@ -199,24 +253,76 @@ function closestColorId(r, g, b) {
 
 
 function renderGrid() {
-  ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
-
-  for (let z = 0; z < pixels.length; z++) {
-    const p = pixels[z];
-
-    if (p.colorId === null) continue;           // transparent
-    if (!visible[p.colorId]) continue;          // masqué
-
-    p.draw(ctx2);
+  for (let i = 0; i < colorCtxs.length; i++) {
+    const ctx = colorCtxs[i];
+    ctx.clearRect(0, 0, canvas2.width, canvas2.height);
+    if (!visible[i]) continue;
+    ctx.drawImage(colorBuffers[i], 0, 0);
   }
+}
+
+function animateColorToggle(colorId, show) {
+  let row = show ? 0 : rows - 1;
+  const dir = show ? 1 : -1;
+  const ctx = colorCtxs[colorId];
+
+  if (show) {
+    ctx.clearRect(0, 0, canvas2.width, canvas2.height);
+  }
+
+  function step() {
+    const done = show ? row >= rows : row < 0;
+    if (done) {
+      colorAnimIds[colorId] = null;
+      return;
+    }
+
+    const y = Math.floor(row * cellSize);
+    const h = Math.ceil(cellSize) * rowsPerFrame;
+    const sliceH = Math.min(h, canvas2.height - y);
+
+    if (sliceH > 0) {
+      if (show) {
+        ctx.drawImage(
+          colorBuffers[colorId],
+          0,
+          y,
+          canvas2.width,
+          sliceH,
+          0,
+          y,
+          canvas2.width,
+          sliceH
+        );
+      } else {
+        ctx.clearRect(0, y, canvas2.width, sliceH);
+      }
+    }
+
+    row += dir * rowsPerFrame;
+    const nextDone = show ? row >= rows : row < 0;
+    if (!nextDone) {
+      colorAnimIds[colorId] = requestAnimationFrame(step);
+    } else {
+      colorAnimIds[colorId] = null;
+    }
+  }
+
+  step();
 }
 //fonction animation affichage image
 
 //CACHER DES PIXEL 
 
 function hidePixel(colorID){
-  visible[colorID] = !visible[colorID];
-  renderGrid();
+  if (colorAnimIds[colorID]) {
+    cancelAnimationFrame(colorAnimIds[colorID]);
+    colorAnimIds[colorID] = null;
+  }
+
+  const willShow = !visible[colorID];
+  visible[colorID] = willShow;
+  animateColorToggle(colorID, willShow);
 }
 window.hidePixel = hidePixel;
     
@@ -224,46 +330,80 @@ window.hidePixel = hidePixel;
 let revealRow = 0;
 let animId = null;
 let rowsPerFrame = 1; // <- mets 1 ici
+let colorProgressDone = [0, 0, 0, 0];
+let colorAnimIds = [null, null, null, null];
+
+function getColorProgress() {
+  return colorTotals.map((total, i) => {
+    if (total === 0) return 0;
+    return colorProgressDone[i] / total;
+  });
+}
 
 function displayImage(color) {
   revealRow = 0;
   if (animId) cancelAnimationFrame(animId);
+  for (let i = 0; i < colorAnimIds.length; i++) {
+    if (colorAnimIds[i]) {
+      cancelAnimationFrame(colorAnimIds[i]);
+      colorAnimIds[i] = null;
+    }
+  }
 
-  ctx2.clearRect(0, 0, canvas2.width, canvas2.height);
+  for (let i = 0; i < colorCtxs.length; i++) {
+    colorCtxs[i].clearRect(0, 0, canvas2.width, canvas2.height);
+  }
 
-  // 👇 affiche la barre à 0% au départ
-  p = 0;
-  progressBars(p);
+  // 👇 affiche les barres à 0% au départ
+  colorProgressDone = [0, 0, 0, 0];
+  progressBars([0, 0, 0, 0]);
 
   function step() {
     for (let r = 0; r < rowsPerFrame; r++) {
       if (revealRow >= rows) break;
 
-      const start = revealRow * cols;
-      for (let x = 0; x < cols; x++) {
-        const pxx = pixels[start + x];
+      const rowIndex = revealRow;
+      const y = Math.floor(rowIndex * cellSize);
+      const h = Math.ceil(cellSize);
+      const sliceH = Math.min(h, canvas2.height - y);
 
-        if (pxx.colorId === null) continue;
-        if (!visible[pxx.colorId]) continue;
+      if (sliceH > 0) {
+        for (let i = 0; i < colorCtxs.length; i++) {
+          if (!visible[i]) continue;
+          colorCtxs[i].drawImage(
+            colorBuffers[i],
+            0,
+            y,
+            canvas2.width,
+            sliceH,
+            0,
+            y,
+            canvas2.width,
+            sliceH
+          );
+        }
+      }
 
-        pxx.draw(ctx2);
+      const rowCounts = rowColorCounts[rowIndex];
+      if (rowCounts) {
+        for (let i = 0; i < rowCounts.length; i++) {
+          colorProgressDone[i] += rowCounts[i];
+        }
       }
 
       revealRow++;
 
-      // 👇 MAJ progression après avoir révélé une ligne
-      p = revealRow / rows;
     }
 
     // 👇 redessine la barre à chaque frame
-    progressBars(p);
+    progressBars(getColorProgress());
 
     if (revealRow < rows) {
       animId = requestAnimationFrame(step);
     } else {
       animId = null;
-      // optionnel: forcer 100% pile
-      progressBars(1);
+      // forcer le rendu final par couleur
+      progressBars(getColorProgress());
     }
   }
 
@@ -301,7 +441,7 @@ function progressBars(progress) {
   ctx3.clearRect(0, 0, w, h);
 
   const gap  = Math.floor(h * 0.01);
-  const count = 3;
+  const count = 4;
 
   const barW = w;
   const usableH = Math.max(0, h - gap * (count - 1));
@@ -309,10 +449,10 @@ function progressBars(progress) {
 
   const progresses = Array.isArray(progress)
     ? progress.map(clamp01)
-    : [clamp01(progress), clamp01(progress), clamp01(progress)];
+    : [clamp01(progress), clamp01(progress), clamp01(progress), clamp01(progress)];
 
   const railStyle = "rgba(0, 0, 0, 1)";
-  const fillStyles = ["white", "white", "white"];
+  const fillStyles = ["rgb(66,44,255)", "rgb(0,255,0)", "rgb(255,0,0)", "rgb(255,255,255)"];
 
   for (let i = 0; i < count; i++) {
     const x0 = 0;
