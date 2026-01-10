@@ -119,7 +119,7 @@ requestAnimationFrame(animateCorners);
 //grille base
 
 let cols = 400;
-let rows = 400;
+let rows = 500;
 let cellSize = canvas2.width/cols;
 let pixels = [];
 

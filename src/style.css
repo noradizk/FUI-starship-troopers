@@ -241,6 +241,7 @@ margin-bottom: 0.2rem;
 .image-tattoo{
   height: 100%;
   width: 100%;
+  border-radius: 5px 5px 5px 5px;
   display: block;
   object-fit: cover;
   background-color: #fff;
@@ -314,7 +315,7 @@ margin-bottom: 0.2rem;
 
 .end-piece{
   height:100%;
-  width: 50%;
+  flex: 0 0 50%;
   border:blue solid var(--b2);
   box-sizing: border-box;
   border-radius: 10px;
@@ -390,6 +391,7 @@ margin-bottom: 0.2rem;
 
 #grid{
   position:absolute;
+  border-radius: 5px 5px 5px 5px;
   inset:0;
   display: block;
   height:100%;
@@ -400,12 +402,14 @@ margin-bottom: 0.2rem;
 #grid-img,
 .grid-layer{
   position: absolute;
+  inset:10%;
   z-index: 1;
   height:80%;
   width:80%;
-  top:50%;
-  left:50%;
-  transform: translate(-50%, -50%);
+  margin:auto;
+  object-fit: contain;
+  object-position: center;
+  transform: none;
 
 }
 
@@ -413,8 +417,9 @@ margin-bottom: 0.2rem;
 .rect-bottom{
   margin-left:1rem;
   position: relative;
-  width: 50%;
-  height:100%;
+  flex: 1 1 0;
+  min-width:0;
+  height: 100%;
   background: yellowgreen;
   border: greenyellow solid var(--b2);
   box-sizing: border-box;
@@ -427,6 +432,7 @@ margin-bottom: 0.2rem;
 }
 
 .progress-inner{
+  border-radius:5px 0 0 5px;
   flex: 0 0 10%;
   position: relative;
   height: 100%;
@@ -435,6 +441,7 @@ margin-bottom: 0.2rem;
 
 .progress{
   flex: 1 1 auto;
+  border-radius: 0 5px 5px 0;
   height: 100%;
   display: block;
   background: #000;
