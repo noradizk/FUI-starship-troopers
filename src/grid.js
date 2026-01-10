@@ -67,7 +67,7 @@ function drawGridLines(ctx, w, h) {
   const spacingX = w / 15;
   const spacingY = w / 15;
 
-  for (let i = 0; i < 17; i++) {
+  for (let i = 0; i < 25; i++) {
     ctx.beginPath();
     ctx.moveTo(0, i * spacingY);
     ctx.lineTo(w, i * spacingY);

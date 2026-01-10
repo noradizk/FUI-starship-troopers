@@ -1,4 +1,5 @@
 import { initGridFx } from "./gridFx.js";
+import "./scale.js";
 
 // code pour le popup
 let selected = document.querySelector("#load-image");

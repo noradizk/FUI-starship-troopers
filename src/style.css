@@ -1,20 +1,63 @@
 @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@400..900&display=swap');
 
+:root{
+  font-size:16px;
+}
+
 html, body {
-  margin: 0;
-  padding: 0;
-  overflow: hidden;
-  background: #000;
+  margin:0;
+  padding:0;
+  width:100%;
+  height:100%;
+  overflow:hidden;
+  background:red;
+}
+#wrap{
+  width:100vw;
+  height:100vh;
+  display:grid;
+  place-items:center;
+  overflow:hidden;
+}
+
+/*format de référence*/
+#stage{
+  width:800px;
+  height:600px;
+  position:relative;
+  transform-origin: center center;
   display:flex;
-  flex-direction: column;
-  height: 100%;
-  width: 100%;
+  flex-direction:column;
+  box-sizing:border-box;
+  padding: 16px;
+  gap:0;
+  overflow: hidden;
+  background-color: #000;
+  --b1:1px;
+  --b2:5px;
+  --u: 8px;
+  --footer-h:80px;
+  
+
+}
+
+#stage::before{
+  display:block;
+}
+#stage.debug::before{
+  display:block;
+  content:"";
+  position:absolute;
+  inset: 60px 80px; /* top/bottom 60, left/right 80 => 640x480 safe */
+  outline:1px dashed rgba(255,255,255,0.25);
+  pointer-events:none;
 }
 
 .title{
+  flex: 0 0 5%;
   display:flex;
   flex-direction: row;
-  height:4.5rem;
+  height:2rem;
 
 }
 
@@ -22,7 +65,7 @@ html, body {
   margin-top:0;
   text-align: center;
   font-family: "Orbitron", sans-serif;
-  font-size: 3.8rem;
+  font-size: 1.8rem;
   color: white;
   width:25%;
  
@@ -33,19 +76,20 @@ html, body {
   margin-top:0;
   text-align: center;
   font-family: "Orbitron", sans-serif;
-  font-size: 3.8rem;
+  font-size: 1.8rem;
   color:yellow;
   width:25%;
 
 }
 
 .screen{
+flex: 1 1 90%;
 display: flex;
 flex-direction: row;
 justify-content: center;
 flex: 1 1 auto;
 min-height: 0;
-margin-bottom: 0.5rem;
+margin-bottom: 0.2rem;
 
 
 }
@@ -54,7 +98,7 @@ margin-bottom: 0.5rem;
   display: flex;
   flex-direction: column;
   height: 100%;
-  width: 50vw;
+  width: 50%;
 
 }
 
@@ -106,18 +150,19 @@ margin-bottom: 0.5rem;
   display: grid;
 
   /* ✅ 2 colonnes fixes = 2x2 si blocksCount = 4 */
-  grid-template-columns: repeat(2, 1fr);
-  
+  grid-template-columns: repeat(2, max-content);
+  column-gap: 0.5rem;
+  row-gap: 0.5rem;
 
   /* ✅ gap avec unité + responsive */
-  gap: clamp(0.5rem, 1vw, 1rem);
+  gap: 0.9rem;
 
   /* ✅ un peu d’air pour que ça ne colle pas aux bords */
-  padding: clamp(0.5rem, 1vw, 0.5rem);
+  padding: 0.04rem;
 
   /* ✅ évite que ça se centre bizarrement */
-  align-content: start;
-  justify-content: start;
+  align-content: center;
+  justify-content: center;
 }
 
 /* 1 bloc = grille 4x4 */
@@ -125,16 +170,16 @@ margin-bottom: 0.5rem;
   display: grid;
 
   /* ✅ remplace les 28px par une taille responsive */
-  --cell: clamp(1.15rem, 1.8vw, 1.7rem);
-  --inner-gap: clamp(0.3rem, 0.5vw, 1rem);
+  --cell: 0.9rem;
+  --inner-gap: 0.25rem;
 
   grid-template-columns: repeat(4, var(--cell));
   grid-auto-rows: var(--cell);
   gap: var(--inner-gap);
-  padding:0.2rem;
+  padding:0.1rem;
   /* ✅ garde le bloc collé à gauche dans sa colonne */
   justify-self: center;
-    transition: opacity 250ms ease, ;
+    transition: opacity 250ms ease;
   will-change: opacity;
 }
 
@@ -155,21 +200,22 @@ margin-bottom: 0.5rem;
   font-variant-numeric: tabular-nums;
 
   /* ✅ taille du chiffre responsive (au lieu de 1.8rem fixe) */
-  font-size: clamp(2.1rem, 2vw, 3rem);
+  font-size: 1.5rem;
 
   /* ✅ line-height normal pour éviter l’écrasement */
-  line-height: 2px;
-  letter-spacing: 0.08rem;
+  line-height: 2;
+  letter-spacing:0.1rem;
 
   /* ⚠️ si ton fond est violet, évite violet sinon tu vois rien */
   color: rgb(142, 24, 246); /* ou un violet clair si tu préfères */
 }
 
 .text-content{
-  padding-top: 1rem;
+  padding-top:0.1rem;
   font-family: "Orbitron", sans-serif;
   font-weight: 400;
-  font-size: 3.8rem;
+  font-size: 1.3rem;
+  letter-spacing: 0.15rem;
   color: white;
   margin:0;
   line-height: 0.9;
@@ -184,7 +230,7 @@ margin-bottom: 0.5rem;
   width: 100%;
   background-color: #000;
   padding: 3px;
-  border: rgb(255, 255, 255) solid 7px;
+  border: rgb(255, 255, 255) solid var(--b2);
   border-radius: 10px;
   box-sizing: border-box;
   display: flex;
@@ -216,14 +262,16 @@ margin-bottom: 0.5rem;
   display: block;
 }
 .lasers-col{
+
   display: flex;
   flex-direction: column;
   gap: 0.4rem;
-  padding: 0.3rem;
+  padding: 0.1rem;
   width: 50%;
-  height: 100%;
+  min-height: 0;
   box-sizing: border-box;
-  border: blue solid  7px;
+  margin-top: 0.3rem;
+  border: blue solid  var(--b2);
   border-radius: 10px;
   min-height: 0;
 }
@@ -242,14 +290,14 @@ margin-bottom: 0.5rem;
 }
 .laser-wrapper{
   flex: 1 1 auto;
-  border: white solid 2px;
+  border: white solid var(--b1);
   border-radius: 10px;
   overflow: hidden;
   min-height: 0;
 }
 .laser-name{
   margin:0;
-  font-size: 2rem;
+  font-size: 0.9rem;
   font-weight: 400;
   color: white;
   font-family: "Orbitron", sans-serif;
@@ -266,21 +314,21 @@ margin-bottom: 0.5rem;
 
 .end-piece{
   height:100%;
-  width: 50vw;
-  border:blue solid  7px;
+  width: 50%;
+  border:blue solid var(--b2);
   box-sizing: border-box;
   border-radius: 10px;
   display: flex;
   align-items: center;
-  justify-content: flex-start;
-  padding-left: 1.2rem;
+  justify-content: center;
 }
 
 .titre-orange{
   margin: 0;
   font-family: "Orbitron", sans-serif;
+  text-align: left;
   font-weight: 400;
-  font-size: 4.5rem;
+  font-size: 2.1rem;
   color: #f0b000;
   letter-spacing: 0.08rem;
 }
@@ -292,7 +340,7 @@ margin-bottom: 0.5rem;
   flex-direction:column;
   align-items: end;
   position: relative;
-  width: 50vw;
+  width: 50%;
   height: 100%;
   overflow: visible;
   gap:1.2rem;
@@ -324,7 +372,7 @@ margin-bottom: 0.5rem;
   position: relative;
   width:90%;
   height: 95%;
-  border: greenyellow solid 7px;
+  border: greenyellow solid var(--b2);
   border-radius: 10px;
   z-index: 1;
   overflow: visible;
@@ -363,17 +411,18 @@ margin-bottom: 0.5rem;
 
 
 .rect-bottom{
+  margin-left:1rem;
   position: relative;
-  width: 50vw;
+  width: 50%;
   height:100%;
   background: yellowgreen;
-  border: greenyellow solid 7px;
+  border: greenyellow solid var(--b2);
   box-sizing: border-box;
   border-radius: 10px;
   display: flex;
   flex-direction: row;
   align-items: stretch;
-  gap: 0.5rem
+  gap: 0.5rem;
 
 }
 
@@ -393,12 +442,11 @@ margin-bottom: 0.5rem;
 
 
 .footer{
+  flex: 0 0 var(--footer-h);
   padding:0;
-  width:100%;
-  height: clamp(3rem, 12vh, 8rem);
+  height: var(--footer-h);
   display:flex;
   flex-direction: row;
-  gap:1rem;
 
 
 }
@@ -424,7 +472,7 @@ margin-bottom: 0.5rem;
   flex-direction: row;
   width: 80%;
   height: 80%;
-  border: yellowgreen solid 7px;
+  border: yellowgreen solid var(--b2);
   border-radius: 10px;
   background: rgb(0, 0, 0);
   padding: 4rem;
@@ -445,7 +493,7 @@ margin-bottom: 0.5rem;
  justify-content: end;
   width: 13rem;
   height:25%;
-  border: greenyellow solid 7px;
+  border: greenyellow solid var(--b2);
   border-radius: 10px;
 }
 
