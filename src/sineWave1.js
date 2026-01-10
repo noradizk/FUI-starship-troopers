@@ -28,9 +28,11 @@ const ctx4 = canvas4.getContext("2d");
 
 // Une seule logique de resize
 function resizeCanvasToWrapper(canvas) {
-  const rect = canvas.parentElement.getBoundingClientRect();
-  canvas.width = rect.width;
-  canvas.height = rect.height;
+  const parent = canvas.parentElement;
+  const cssW = parent.clientWidth;
+  const cssH = parent.clientHeight;
+  canvas.width = Math.floor(cssW);
+  canvas.height = Math.floor(cssH);
 }
 
 function resizeAll() {
