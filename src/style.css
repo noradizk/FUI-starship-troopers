@@ -479,10 +479,10 @@ margin-bottom: 0.2rem;
   flex-direction: row;
   width: 80%;
   height: 80%;
-  border: yellowgreen solid var(--b2);
+  border: blue solid var(--b2);
   border-radius: 10px;
   background: rgb(0, 0, 0);
-  padding: 4rem;
+  padding: 1.5rem;
   box-sizing: border-box;
 }
 
@@ -500,7 +500,7 @@ margin-bottom: 0.2rem;
   flex-direction: column;
   justify-content: end;
   min-height: 0;
-  border: greenyellow solid var(--b2);
+  border: blue solid var(--b2);
   border-radius: 10px;
   overflow: hidden;
   background: rgb(8, 8, 8);
@@ -519,14 +519,4 @@ margin-bottom: 0.2rem;
   object-fit: cover;
 }
 
-.selection-name{
-  height: 2.6rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  text-align: center;
-  background-color: rgba(173, 255, 47, 0.9);
-  margin:0;
-  letter-spacing: 0.06em;
-  font-size: 0.9rem;
-}
+
