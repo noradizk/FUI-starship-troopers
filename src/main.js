@@ -14,15 +14,54 @@ initGridFx();
 
 // DATA des tattoos
 const tattoos = {
-  death: {
-    main: "/images/death.jpg",
-    overlay: "/images/death-red.jpg"
+  death_above: {
+    main: "/images/death-above.png",
+    overlay: "/images/death-grid.png"
   },
 
   infantry: {
-    main: "/images/infantry-selection.jpg",
-    overlay: "/images/infantry.jpg"
-  }
+    main: "/images/infantry.png",
+    overlay: "/images/infantry-grid.png"
+  },
+
+    UCF: {
+    main: "/images/UCF.png",
+    overlay: "/images/UCF-grid.png"
+  },
+    arachnids: {
+    main: "/images/arachnids.png",
+    overlay: "/images/arachnids-grid.png"
+  },
+    FedNet: {
+    main: "/images/FedNet.png",
+    overlay: "/images/FedNet-grid.png"
+  },
+
+    NoBugs: {
+    main: "/images/NoBugs.png",
+    overlay: "/images/NoBugs-grid.png"
+  },
+
+    Fleet: {
+    main: "/images/fleet.png",
+    overlay: "/images/fleet-grid.png"
+  },
+    rough: {
+    main: "/images/rough.png",
+    overlay: "/images/rough-grid.png"
+  },
+    more: {
+    main: "/images/more.png",
+    overlay: "/images/more-grid.png"
+  },
+    sword: {
+    main: "/images/more.png",
+    overlay: "/images/sword-grid.png"
+  },
+    movie_logo: {
+    main: "/images/movie-logo.png",
+    overlay: "/images/movie-logo-grid.png"
+  },
 }
 
 let currentTattooId = null

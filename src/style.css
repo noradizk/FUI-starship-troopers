@@ -11,6 +11,9 @@ html, body {
   height:100%;
   overflow:hidden;
   background:red;
+  /* Cursor: drop your image in /public/images and uncomment below.
+     Hotspot (x y) = click point in pixels from top-left of the image. */
+   cursor: url("/images/target.png") 32 32, auto;
 }
 #wrap{
   width:100vw;
@@ -503,7 +506,7 @@ margin-bottom: 0.2rem;
   border: blue solid var(--b2);
   border-radius: 10px;
   overflow: hidden;
-  background: rgb(8, 8, 8);
+  background: rgb(255, 255, 255);
 }
 .selection::after{
   content: "";
@@ -513,10 +516,9 @@ margin-bottom: 0.2rem;
 }
 
 .selection-img{
-  background-color: rgb(15, 3, 3);
+  background-color: rgb(255, 255, 255);
   height: 100%;
   width:100%;
-  object-fit: cover;
+  object-fit: contain;
 }
-
 
