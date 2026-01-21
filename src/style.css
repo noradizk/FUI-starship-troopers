@@ -246,7 +246,7 @@ margin-bottom: 0.2rem;
   width: 100%;
   border-radius: 5px 5px 5px 5px;
   display: block;
-  object-fit: cover;
+  object-fit: contain;
   background-color: #fff;
 }
 .image-tattoo[src=""],
@@ -260,6 +260,7 @@ margin-bottom: 0.2rem;
   color: white;
   text-align: center;
   display: none;
+  padding: 2rem;
 }
 .image-tattoo[src=""] + .design-placeholder,
 .image-tattoo:not([src]) + .design-placeholder{
@@ -520,5 +521,6 @@ margin-bottom: 0.2rem;
   height: 100%;
   width:100%;
   object-fit: contain;
+
 }
 

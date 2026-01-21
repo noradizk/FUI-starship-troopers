@@ -55,7 +55,7 @@ const tattoos = {
     overlay: "/images/more-grid.png"
   },
     sword: {
-    main: "/images/more.png",
+    main: "/images/sword.png",
     overlay: "/images/sword-grid.png"
   },
     movie_logo: {
